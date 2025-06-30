@@ -2,6 +2,15 @@
 This repo was born with the goal of interacting with the networks (specifically WiFi ones). It started as a simple scanner that could show you the connected devices and some info on the network itselfs. 
 To this day the code in this repo evolved to execute Man In The Middle attacks and DNS poisoning attacks, while stile being able to scan the network for its connected devices.
 
+# Download
+To download and use the code you can run the following commands on Windows command prompt:
+```
+git clone https://github.com/errrgiorgione/dns-mitm-tool
+cd dns-mitm-tool
+pip install -r requirements.txt
+```
+Then you can run the main.py script by calling the Python interpreter.
+
 # Usage
 
 ## Scan the network
