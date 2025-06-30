@@ -39,7 +39,7 @@ I am aware that the both-ways MITM attack (which is the default mode the attack 
 ### Please keep in mind that a MITM attack is more efficient after a little while passed since it started and that its efficiency heavily depends on the network and devices' settings.
 
 ## Run a DNS Poisoning attack
-The DNS Poisoning attack is divided in two phases which are executes simultaneously:
+The DNS Poisoning attack is divided in two phases which are executed simultaneously:
 * Man In The Middle attack
 * Injecting a fake DNS answer in the network
 
@@ -49,7 +49,7 @@ As this attack requires a MITM running in background, you will need to specify t
 
 The output is the same as the one returned from a normal MITM attack but the DNS Poisoning attack also outputs the DNS queries that it intercepted and answered to. In the example above, the fake DNS answers should redirect the device to Youtube.com.
 
-To the day when I am writing this README file, I am aware that this function doesn't really accomplish its goal and, on the various tests i run, it seems like it succesfully interrupts the comunication between the target device and the spoofed device rather than redirecting the target device to some website. I am also aware that the output returned from this function is mixed and not very readable and that stopping this function is impossible unless you kill the terminal where you are running the script or the Python interpreter from the Task Manager.
+To the day when I am writing this README file, I am aware that this function doesn't really accomplish its goal and, on the various tests i run, it seems like it succesfully interrupts the comunication between the target device and the spoofed device rather than redirecting the target device to some website.
 
 ## Test environment
 This script was tested on a Windows 11 laptop using Python 3.10.0, most of the MITM and DNS poisoning attacks were tested by attacking an Android device while faking to be a router. Wireshark was used to monitor the traffic on my laptop.
