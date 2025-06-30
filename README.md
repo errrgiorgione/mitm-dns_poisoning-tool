@@ -42,7 +42,7 @@ The output is the same as the one returned from a normal MITM attack but the DNS
 To the day when I am writing this README file, I am aware that this function doesn't really accomplish its goal and, on the various tests i run, it seems like it succesfully interrupts the comunication between the target device and the spoofed device rather than redirecting the target device to some website. I am also aware that the output returned from this function is mixed and not very readable and that stopping this function is impossible unless you kill the terminal where you are running the script or the Python interpreter from the Task Manager.
 
 ## Test environment
-This script was tested on a Windows 11 laptop using Python 3.10.0, most of the MITM and DNS poisoning attacks were tested by attacking an Android device while faking to be a router.
+This script was tested on a Windows 11 laptop using Python 3.10.0, most of the MITM and DNS poisoning attacks were tested by attacking an Android device while faking to be a router. Wireshark was used to monitor the traffic on my laptop.
 
 # Final notes
 I will continue to work on this script, especially on the bugs I talked about above, and if I will make any progress I will update this repo and this README file. 
