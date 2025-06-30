@@ -7,12 +7,12 @@ null_mac_address = "ff:ff:ff:ff:ff:ff"
 stop_flag_sniffing = threading.Event() #flags mainly used for packet injection
 stop_flag_mitm = threading.Event()
 
-def scan(network_ip: str, verbose: bool, wait: int) -> None:
+def scan(network_ip: str, verbose: bool, wait: int, subnet_mask: int) -> None:
     #checking if the network's ip address is valid
     if not re.search(ipv4_regex, network_ip): return 
 
     #scanning the network
-    subnet = f"{network_ip}/24" #adding subnet mask
+    subnet = f"{network_ip}/{subnet_mask}"
     broadcast_request = scapy.Ether(dst=null_mac_address) / scapy.ARP(pdst=subnet)
     devices = scapy.srp(broadcast_request, timeout = wait, verbose = False)[0] #ignoring unanswered requests
 
@@ -163,6 +163,7 @@ nds_comandparser = comand_parser.add_parser("nds", help="Scan the network for it
 nds_comandparser.add_argument("-g" ,"--gatewayip", required=True, help="Specify the network's IP address", type = str)
 nds_comandparser.add_argument("-v", "--verbose", action="store_true", required=False, help="Shows more info on the found connected devices")
 nds_comandparser.add_argument("-t", "--timeout", required=False, type=int, default=10, help="Specify how long to wait before declaring a request unanswered. A longer time may provide better results. Defualt time is 10 seconds")
+nds_comandparser.add_argument("-sm", "--subnetmask", required=False, type=int, default=24, help="Specify the subnet mask (CIDR notation). Default is 24, which means packets will be sent to all 255 possible hosts in the subnet.")
 
 mitma_comandparser = comand_parser.add_parser("mitma", help="Run a Man In The Middle attack")
 mitma_comandparser.add_argument("-ti", "--targetip", required=True, type=str, help="Target's IP")
@@ -199,7 +200,7 @@ injection_comandparser.add_argument("-ri", "--redirectip", required=True, type=s
 args = parser.parse_args()
 parser = args.comand
 if parser == "nds":
-    scan(args.gatewayip, args.verbose, args.timeout)
+    scan(args.gatewayip, args.verbose, args.timeout, args.subnetmask)
 elif parser == "mitma":
     mitm_attack(args.targetip, args.spoofip, args.attackerip, args.targetmac, args.spoofmac, args.attackermac, args.mactimeout, args.packettimeout, args.mode, args.fixtables)
 elif parser == "dpa":
