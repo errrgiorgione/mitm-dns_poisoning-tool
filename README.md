@@ -21,7 +21,8 @@ The following example shows a basic example to run this script in scan mode.
 It is necessary to specify the network's IP address to start the scan, which will show the IP address, the MAC address and the name of the detected connected device. The device's name will be flagged as "Unknown" if the script failed to find its name.
 Other optional arguments are: 
 * -v / --verbose , which will show the packets sent by the connected devices. The packets will not be formatted.
-* -t / --timeout , it specifies how long the script should wait for a response after sending each packet. On a typical home network, the script usually sends up to 255 packets.
+* -t / --timeout , it specifies how long the script should wait for a response after sending each packet.
+* -sm / --subnetmask , changes the subnet mask of the network.
 
 ## Run a Man In The Middle attack
 To run a MITM attack you must specifies at least the following IP addresses:
