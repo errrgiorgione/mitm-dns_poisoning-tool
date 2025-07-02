@@ -61,7 +61,7 @@ You can run the Flask server on the same device or on any other device that is c
 The fake DNS answers crafted by the main.py script will redirect the attacked device to the device where the Flask server is running. The Flask server will redirect the attacked device to the website you specified in the Flask server script (by default there is no specified website to redirect to).
 
 ## Keep in mind
-The fake DNS answers will be crafted only if the attacked device is asking for one of the IP addresses contained in the dns-mitm-tool\websites_list_without_domains.txt list.  
+The fake DNS answers will be crafted only if the attacked device is asking for the IP address of one of the websites contained in the dns-mitm-tool\websites_list_without_domains.txt list.  
 
 You may also need to set the device running the Flask server detectable on the network:
 
