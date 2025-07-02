@@ -36,7 +36,7 @@ The script will try to find the devices's MAC addresses from their IP addresses 
 You can also manually specify the devices' MAC addresses. You can also modify the timeout of a few functions, the mode of the attack and if to fix the ARP tables.
 
 I am aware that the both-ways MITM attack (which is the default mode the attack uses) triggers a "duplicated use" of both the target device's IP address and the spoofed device's IP address, which often causes the attack to fail. To this day, the one-way MITM attack is the only mode that always worked on my tests.
-# Keep in mind
+## Keep in mind
 A MITM attack is more efficient after a little while passed since it started and that its efficiency heavily depends on the network and devices' settings.
 
 ## Run a DNS Poisoning attack
