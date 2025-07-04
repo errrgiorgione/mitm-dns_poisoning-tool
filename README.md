@@ -74,3 +74,5 @@ This script was tested on a Windows 11 laptop using Python 3.10.0, most of the M
 # Final notes
 I will continue to work on this script, especially on the bugs I talked about above, and if I will make any progress I will update this repo and this README file. 
 Any suggestion is welcomed and this repo is set public to let everyone see and use this code.
+
+Any credits in any projects or videos would be appreciated.
