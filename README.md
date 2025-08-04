@@ -5,8 +5,8 @@ To this day the code in this repo evolved to execute Man In The Middle attacks a
 # Download
 To download and use the code you can run the following commands on Windows command prompt:
 ```
-git clone https://github.com/errrgiorgione/dns-mitm-tool
-cd dns-mitm-tool
+git clone https://github.com/errrgiorgione/mitm-packet_injection-tool
+cd mitm-packet_injection-tool
 pip install -r requirements.txt
 ```
 Then you can run the main.py script by calling the Python interpreter.
@@ -61,7 +61,7 @@ You can run the Flask server on the same device or on any other device that is c
 The fake DNS answers crafted by the main.py script will redirect the attacked device to the device where the Flask server is running. The Flask server will redirect the attacked device to the website you specified in the Flask server script (by default there is no specified website to redirect to).
 
 ## Keep in mind
-The fake DNS answers will be crafted only if the attacked device is asking for the IP address of one of the websites contained in the dns-mitm-tool\websites_list_without_domains.txt list.  
+The fake DNS answers will be crafted only if the attacked device is asking for the IP address of one of the websites contained in the mitm-packet_injection-tool\websites_list_without_domains.txt list.  
 
 You may also need to set the device running the Flask server detectable on the network:
 
