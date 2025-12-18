@@ -26,8 +26,11 @@ def scan(network_ip: str, verbose: bool, wait: int, subnet_mask: int) -> None:
     for device in devices: 
         device_ip = device[1].psrc
         device_mac = device[1].hwsrc
-        name = "Unknown" if "DNS" in (result := subprocess.run(["nslookup", device_ip], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True).stdout.split("\n")[3]) else result.split(":")[1].strip()
-        
+        result = subprocess.run(["nslookup", device_ip], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True).stdout
+        try:
+            name = "Unknown" if "DNS" in result.split("\n")[3] else "".join([x.strip() for x in result.split(":")[1].split("\n")[0] if isinstance(x, str)])
+        except IndexError as e:
+            name = "Failed to format ouput" 
         if verbose: print(f"\n{device}\nName:{name}")
         else: print(f"{device_ip}\t\t\t{device_mac}\t\t\t{name}")
 
