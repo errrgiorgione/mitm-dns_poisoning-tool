@@ -28,7 +28,6 @@ fandom
 foxnews
 github
 globo
-google
 ikea
 ilovepdf
 imdb

@@ -34,6 +34,9 @@ Other optionals parameters are the following:
 > [!IMPORTANT]
 > As mentioned earlier, this mode runs a `nslookup` command. That and the way the script formats the output to found the device's name, may cause problems on MacOS or Linux-based operating systems.
 
+> [!IMPORTANT]
+> It's important you make sure the `NSLOOKUP_OUTPUT_NAME_LABEL` constant value is set in the same language of your device, otherwise the script will fail to show the devices' name and `Failed to format ouput` will be shown.
+
 ## Run a Man In The Middle attack
 
 The following picture shows a basic example to run a Man In The Middle attack using this tool.
